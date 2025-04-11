@@ -1,0 +1,45 @@
+Prueba Técnica
+
+## Prueba Técnica: Sistema de Gestión de Reservas de Aerolínea
+
+### Descripción del Proyecto
+Desarrollar un sistema de gestión de reservas para una aerolínea. El sistema deberá permitir a los usuarios realizar las siguientes acciones:
+
+1. **Buscar Vuelos**: Los usuarios deben poder buscar vuelos según la fecha, origen y destino.
+2. **Reservar un Vuelo**: Los usuarios deben poder reservar un vuelo seleccionado.
+3. **Consultar Reservas**: Los usuarios deben poder ver sus reservas actuales.
+4. **Cancelar Reservas**: Los usuarios deben poder cancelar una reserva.
+
+### Requisitos Técnicos
+1.	**API RESTful**: Crear una API RESTful para la comunicación para los diferentes Endpoints. Puede ser en FastAPI, Flask o Django.
+2.	**AutoDocumentación**: Se debe contar con una página de autodocumentación de los Endpoints. Se recomienda usar Swager
+3.	 **Base de Datos**: Utilizar una base de datos adecuada (relacional o no relacional) para almacenar la información de los vuelos, reservas y usuarios.
+
+### Opcionales
+Si desea puede complementar su proyecto con los siguientes puntos 
+1. **Pruebas**: Implementar pruebas unitarias para asegurar el correcto funcionamiento de endpont.
+2. **Gestión de usuarios**: Implementar servicios de Autenticación, Logout, Creación de usuario (Puede ser por Oauth2 o tradicional), manejo de JWT.
+3. **Frontend**: Desarrollar una interfaz de usuario que permita a los usuarios interactuar con el sistema. Puedes usar cualquier framework de frontend que prefieras (React, Angular, Vue, etc.).
+4. **Microservicios**: Implementar al menos tres microservicios que gestionen:
+   - Búsqueda de vuelos
+   - Reservas de vuelos
+   - Gestión de usuarios (registro, inicio de sesión)
+
+### Entrega
+1. **Repositorio en GitHub**: Crear un repositorio en GitHub y subir el código completo del proyecto. El repositorio debe incluir:
+   - Código fuente
+   - Un archivo `README.md` que contenga:
+     - Descripción del proyecto
+     - Instrucciones para la instalación y ejecución del proyecto
+     - Ejemplos de uso de la API
+     - Detalles sobre cómo se pueden ejecutar las pruebas
+
+### Criterios de Evaluación
+1. **Estructura del Código**: Claridad y organización del código.
+2. **Funcionalidad**: Cumplimiento de los requisitos funcionales establecidos.
+3. **Calidad de la API**: Diseño y documentación de la API.
+4. **Documentación**: Calidad del archivo `README.md` y facilidad de uso del proyecto.
+
+### Notas Adicionales
+-  La prueba de Backend debe ser realizada en Python. EL Frontend (en caso de realizarlo) puede ser realizado en el framework que desees.
+- Se espera que los candidatos muestren su capacidad para resolver problemas y su creatividad en la implementación.

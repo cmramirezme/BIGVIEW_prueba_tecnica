@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  flight-search:
+    image: python:3.9
+    container_name: flight-search
+    build:
+      context: ./flight-search
+    ports:
+      - "5001:5001"
+    environment:
+      - MONGO_URI=mongodb://flight-search-db:27017/flightsearchdb
+    depends_on:
+      - flight-search-db
+    networks:
+      - app-network
+
+  flight-search-db:
+    image: mongo:6.0
+    container_name: flight-search-db
+    environment:
+      MONGO_INITDB_DATABASE: flightsearchdb
+    volumes:
+      - flight-search-data:/data/db
+    networks:
+      - app-network
+
+  flight-booking:
+    image: python:3.9
+    container_name: flight-booking
+    build:
+      context: ./flight-booking
+    ports:
+      - "5002:5002"
+    environment:
+      - MONGO_URI=mongodb://flight-booking-db:27018/flightbookingdb
+    depends_on:
+      - flight-booking-db
+    networks:
+      - app-network
+
+  flight-booking-db:
+    image: mongo:6.0
+    container_name: flight-booking-db
+    environment:
+      MONGO_INITDB_DATABASE: flightbookingdb
+    volumes:
+      - flight-booking-data:/data/db
+    networks:
+      - app-network
+
+  user-management:
+    image: python:3.9
+    container_name: user-management
+    build:
+      context: ./user-management
+    ports:
+      - "5003:5003"
+    environment:
+      - MONGO_URI=mongodb://user-management-db:27019/usermanagementdb
+    depends_on:
+      - user-management-db
+    networks:
+      - app-network
+
+  user-management-db:
+    image: mongo:6.0
+    container_name: user-management-db
+    environment:
+      MONGO_INITDB_DATABASE: usermanagementdb
+    volumes:
+      - user-management-data:/data/db
+    networks:
+      - app-network
+
+volumes:
+  flight-search-data:
+  flight-booking-data:
+  user-management-data:
+
+networks:
+  app-network:
