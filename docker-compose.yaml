@@ -21,7 +21,9 @@ services:
     environment:
       MONGO_INITDB_DATABASE: flightsearchdb
     volumes:
-      - flight-search-data:/data/db
+      - ./flight-search/data_db:/data/db  # Mapeo a la ubicación en el host
+    ports:
+      - "27017:27017"  # Mapeo del puerto al host
     networks:
       - app-network
 
@@ -45,7 +47,9 @@ services:
     environment:
       MONGO_INITDB_DATABASE: flightbookingdb
     volumes:
-      - flight-booking-data:/data/db
+      - ./flight-booking/data_db:/data/db  # Mapeo a la ubicación en el host
+    ports:
+      - "27018:27017"  # Mapeo del puerto al host
     networks:
       - app-network
 
@@ -69,14 +73,12 @@ services:
     environment:
       MONGO_INITDB_DATABASE: usermanagementdb
     volumes:
-      - user-management-data:/data/db
+      - ./user-management/data_db:/data/db  # Mapeo a la ubicación en el host
+    ports:
+      - "27019:27017"  # Mapeo del puerto al host
     networks:
       - app-network
 
-volumes:
-  flight-search-data:
-  flight-booking-data:
-  user-management-data:
-
+volumes: {}
 networks:
   app-network:

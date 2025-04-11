@@ -1,0 +1,13 @@
+blinker
+click
+colorama
+dnspython
+Flask
+Flask-PyMongo
+importlib-metadata
+itsdangerous
+Jinja2
+MarkupSafe
+pymongo
+Werkzeug
+zipp
