@@ -1,13 +1,14 @@
-FROM alpine:3.10
+# Imagen base de Python (más compatible con el entorno del docker-compose)
+FROM python:3.9-slim
 
-RUN apk add --no-cache python3 python3-dev py3-pip \
-    && python3 -m ensurepip \
-    && pip3 install --no-cache-dir --upgrade pip
-
-
+# Establecer el directorio de trabajo dentro del contenedor
 WORKDIR /app
-COPY . /app
 
-RUN pip3 --no-cache-dir install -r requirements.txt
+# Copiar los archivos del proyecto al directorio de trabajo
+COPY . .
 
-CMD ["python3","src/app.py"]
+# Instalar las dependencias definidas en requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Definir el comando por defecto para ejecutar la aplicación
+CMD ["python", "src/app.py"]
