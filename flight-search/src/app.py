@@ -1,6 +1,6 @@
 from flask import Flask, request,jsonify, Response
 from flask_pymongo import PyMongo
-from bson import json_util
+from bson import json_util,ObjectId
 from pymongo import MongoClient
 from datetime import datetime
 import requests
@@ -37,6 +37,7 @@ def booking():
         # Obtener el JSON de la solicitud
         data = request.get_json()
         to_booking_ids = data.get("toBooking", [])
+        to_booking_ids = [ObjectId(id) for id in to_booking_ids]
 
         if not to_booking_ids:
             return jsonify({"message": "No se proporcionaron IDs para reservar."}), 400
@@ -53,11 +54,12 @@ def booking():
         # Actualizar los documentos en la colección Flights
         result = db.Flights.update_many(
             {"_id": {"$in": to_booking_ids}},  # Coincidir con los IDs proporcionados
-            {"$set": {"user": user_id}}       # Asignar el ID del usuario
+            {"$set": {"user": ObjectId(user_id)}}       # Asignar el ID del usuario
         )
 
         return jsonify({
             "message": "Vuelos reservados.",
+            "user_id": user_id,
             "matched_count": result.matched_count,
             "modified_count": result.modified_count
         }), 200
