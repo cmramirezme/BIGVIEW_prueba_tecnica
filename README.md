@@ -22,9 +22,8 @@ El API Gateway actúa como punto único de entrada, gestionando la autenticació
 
 1. Clonar el repositorio:
    ```bash
-   git clone https://github.com/cmramirezme/BIGVIEW_prueba_tecnica.git
+   git clone --branch master --single-branch https://github.com/cmramirezme/BIGVIEW_prueba_tecnica.git
    cd BIGVIEW_prueba_tecnica
-   git checkout master
    ```
 
 2. Ejecutar los contenedores:
