@@ -1,6 +1,24 @@
 version: '3.8'
 
 services:
+  api-gateway:
+    container_name: api-gateway
+    build:
+      context: ./ap-gateway  # Directorio del código del API Gateway
+    ports:
+      - "5000:5000"  # Exponer el API Gateway en el puerto 5000
+    depends_on:
+      - flight-search
+      - flight-booking
+      - user-management
+    networks:
+      - app-network
+    environment:
+      - FLIGHT_SEARCH_SERVICE=http://flight-search:5001
+      - FLIGHT_BOOKING_SERVICE=http://flight-booking:5002
+      - USER_MANAGEMENT_SERVICE=http://user-management:5003
+      - SECRET_KEY=your_secret_key  # Llave usada para autenticación (opcional)
+
   flight-search:
     container_name: flight-search
     build:
@@ -53,7 +71,6 @@ services:
       - app-network
 
   user-management:
-    image: python:3.9
     container_name: user-management
     build:
       context: ./user-management

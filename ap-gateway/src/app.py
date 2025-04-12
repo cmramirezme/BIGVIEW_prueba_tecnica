@@ -19,10 +19,17 @@ def booking_service(path):
     # Verificar si el token está presente y válido
     if not token or not validate_token(token):
         # Si no hay token o es inválido, redirige al microservicio de gestión de usuarios
-        return redirect_to_user_service()
+        return redirect_to_user_management()
 
     # Si el token es válido, reenvía la solicitud al microservicio de reservas
     url = f"{MICROSERVICES['booking_service']}/{path}"
+    response = forward_request(url)
+    return response
+
+# Ruta general para manejar solicitudes al microservicio de gestion de usuarios
+@app.route('/user-management/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+def user_management(path):
+    url = f"{MICROSERVICES['user_service']}/{path}"
     response = forward_request(url)
     return response
 
@@ -47,10 +54,14 @@ def validate_token(token):
         return False
 
 
-def redirect_to_user_service():
-    """Redirige automáticamente al microservicio de gestión de usuarios."""
-    url = f"{MICROSERVICES['user_service']}/login"  # Supongamos que este es el endpoint de autenticación
-    return redirect(url, code=302)  # Código 302 para redirección temporal
+def redirect_to_user_management():
+    """Indica al usuario las URL para registro o inicio de sesión en el microservicio user-management."""
+    return jsonify({
+        "message": "Token inválido o no proporcionado. Por favor, utiliza una de las siguientes URLs:",
+        "login_url": "http://localhost:5000/user-management/login",  # Para iniciar sesión
+        "register_url": "http://localhost:5000/user-management/register"  # Para crear un nuevo usuario
+    }), 401  # Código 401 indica que la autenticación es requerida
+
 
 def forward_request(url):
     """Redirige la solicitud HTTP al microservicio correspondiente."""
