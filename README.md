@@ -22,7 +22,7 @@ El API Gateway actúa como punto único de entrada, gestionando la autenticació
 
 1. Clonar el repositorio:
    ```bash
-   git clone https://github.com/cmramirezme/BIGVIEW.git
+   git clone --branch master --single-branch https://github.com/cmramirezme/BIGVIEW.git
    cd BIGVIEW
    ```
 
