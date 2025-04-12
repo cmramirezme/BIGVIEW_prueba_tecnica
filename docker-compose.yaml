@@ -9,15 +9,12 @@ services:
       - "5000:5000"  # Exponer el API Gateway en el puerto 5000
     depends_on:
       - flight-search
-      - flight-booking
       - user-management
     networks:
       - app-network
     environment:
       - FLIGHT_SEARCH_SERVICE=http://flight-search:5001
-      - FLIGHT_BOOKING_SERVICE=http://flight-booking:5002
       - USER_MANAGEMENT_SERVICE=http://user-management:5003
-      - SECRET_KEY=your_secret_key  # Llave usada para autenticación (opcional)
 
   flight-search:
     container_name: flight-search
@@ -41,32 +38,6 @@ services:
       - ./flight-search/data_db:/data/db  # Mapeo a la ubicación en el host
     ports:
       - "27017:27017"  # Mapeo del puerto al host
-    networks:
-      - app-network
-
-  flight-booking:
-    image: python:3.9
-    container_name: flight-booking
-    build:
-      context: ./flight-booking
-    ports:
-      - "5002:5002"
-    environment:
-      - MONGO_URI=mongodb://flight-booking-db:27018/flightbookingdb
-    depends_on:
-      - flight-booking-db
-    networks:
-      - app-network
-
-  flight-booking-db:
-    image: mongo:6.0
-    container_name: flight-booking-db
-    environment:
-      MONGO_INITDB_DATABASE: flightbookingdb
-    volumes:
-      - ./flight-booking/data_db:/data/db  # Mapeo a la ubicación en el host
-    ports:
-      - "27018:27017"  # Mapeo del puerto al host
     networks:
       - app-network
 

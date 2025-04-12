@@ -7,11 +7,11 @@ app = Flask(__name__)
 # Configuración de microservicios
 MICROSERVICES = {
     "user_service": "http://user-management:5003",  # Dirección del microservicio de gestión de usuarios
-    "booking_service": "http://flight-booking:5002",  # Dirección del microservicio de reservas
+    "flights-management": "http://flight-search:5001",  # Dirección del microservicio de reservas
 }
 
 # Ruta general para manejar solicitudes al microservicio de reservas
-@app.route('/booking/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/flights-management/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def booking_service(path):
     """Verifica la autenticación y redirige a 'user_service' si es inválida."""
     token = request.headers.get('Authorization')  # Obtener el token de autenticación
@@ -22,9 +22,10 @@ def booking_service(path):
         return redirect_to_user_management()
 
     # Si el token es válido, reenvía la solicitud al microservicio de reservas
-    url = f"{MICROSERVICES['booking_service']}/{path}"
+    url = f"{MICROSERVICES['flights-management']}/{path}"
     response = forward_request(url)
     return response
+
 
 # Ruta general para manejar solicitudes al microservicio de gestion de usuarios
 @app.route('/user-management/<path:path>', methods=['GET', 'POST', 'PUT', 'DELETE'])
@@ -37,7 +38,7 @@ def validate_token(token):
     """Valida el token proporcionado y retorna True si es válido."""
     try:
         # Decodificar el token usando el secreto y el algoritmo especificado
-        decoded_token = jwt.decode(token, app.config["SECRET_KEY"], algorithms=["HS256"])
+        decoded_token = jwt.decode(token, "your_secret_key", algorithms=["HS256"])
 
         # Puedes agregar más validaciones si es necesario, por ejemplo:
         # Verificar si el token contiene campos requeridos como 'username'

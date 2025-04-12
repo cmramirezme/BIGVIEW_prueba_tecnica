@@ -58,7 +58,7 @@ def login():
         # Generar un token JWT
         token = jwt.encode({
             "username": username,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1)
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=10)
         }, app.config["SECRET_KEY"], algorithm="HS256")
 
         return jsonify({"message": "Inicio de sesión exitoso.", "token": token}), 200
@@ -66,6 +66,39 @@ def login():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+# Ruta para obtener id usuarios
+@app.route('/id-user', methods=['GET'])
+def get_id():
+    try:
+        # Obtener el token del header
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({"message": "Token de autenticación no proporcionado."}), 401
+
+        # Decodificar el token para obtener el nombre de usuario
+        try:
+            decoded_token = jwt.decode(token, "your_secret_key", algorithms=["HS256"])
+            username = decoded_token.get("username")
+        except jwt.ExpiredSignatureError:
+            return jsonify({"message": "El token ha expirado."}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({"message": "El token es inválido."}), 401
+
+        if not username:
+            return jsonify({"message": "El token no contiene un campo 'username'."}), 400
+        
+         # Buscar el usuario en la base de datos
+        user = db.Users.find_one({"username": username})
+        if not user:
+            return jsonify({"message": "Usuario no encontrado."}), 404
+
+        # Devolver el ID del usuario
+        user_id = str(user["_id"])  # Convertir ObjectId a string para incluirlo en la respuesta
+        return jsonify({"user_id": user_id}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
 """# Ruta para verificar el token (opcional, puede ser usada como middleware)
 @app.route('/verify-token', methods=['POST'])
 def verify_token():
