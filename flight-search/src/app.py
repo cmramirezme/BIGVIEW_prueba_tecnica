@@ -2,40 +2,25 @@ from flask import Flask, request,jsonify, Response
 from flask_pymongo import PyMongo
 from bson import json_util
 from pymongo import MongoClient
-
+from datetime import datetime
 
 app = Flask(__name__)
 mongo = MongoClient("mongodb://flight-search-db:27017/")  # Cambia la URI si es diferente
 db = mongo["FlightDB"]  # Nombre de la base de datos
-"""
-@app.route('/flight/country',methods=['POST'])#Creacion de rutas para añadir country (esta a la escuha)
-def create_country():
-    #Receiving country
-    country_name=request.json['country_name'] #Los datos del Json recibido se almacena en variables
-    if country_name:
-        id=mongo.db.Country.insert_one(
-            {'country_name':country_name}
-        )
-        response={
-            'message':str(id),
-            'country_name':country_name        
-        }
-        return response
-    else:
-        return not_found()
-"""
+
 @app.route('/search',methods=['Get'])
 def give_flights():
     origin=request.json['origin']
     destination=request.json['destination']
-    date=request.json['date']
+    date = datetime.strptime(request.json['date'], "%Y-%m-%dT%H:%M:%S.%f%z")
     print(request.json)
     print('holaMundo')
-    if origin and destination:
+    if origin and destination and date:
         #esta funcion obtiene los datos en formato Bson
         flights = db.Flights.find({
             'origen':{'$eq':origin},
-            'destino':{'$eq':destination}
+            'destino':{'$eq':destination},
+            'fecha' : {'$eq':date}
         })
         
         response=json_util.dumps(flights) # Aqui se pasa de Bson a Json
