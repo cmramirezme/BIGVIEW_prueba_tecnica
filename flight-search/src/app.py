@@ -31,6 +31,24 @@ def give_flights():
         response=json_util.dumps(flights) # Aqui se pasa de Bson a Json
         return Response(response,mimetype='application/json')
     
+@app.route('/my-flyghts',methods=['GET'])
+def get_myflights():
+    # Obtener el token de la cabecera de la solicitud
+    token = request.headers.get('Authorization')
+    if not token:
+        return jsonify({"message": "Token de autenticación no proporcionado."}), 401
+    # Solicitar el ID del usuario al API Gateway
+    user_id = get_user_id_from_api_gateway(token)
+    if not user_id:
+        return jsonify({"message":  "No se pudo obtener el id del usuario deseado" }), 401
+   
+    flights = db.Flights.find({
+        'user' : {'$eq':ObjectId(user_id)}
+    })
+        
+    response=json_util.dumps(flights) # Aqui se pasa de Bson a Json
+    return Response(response,mimetype='application/json')
+    
 @app.route('/booking',methods=['POST'])
 def booking():
     try:
@@ -62,6 +80,46 @@ def booking():
             "user_id": user_id,
             "matched_count": result.matched_count,
             "modified_count": result.modified_count
+        }), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+    
+@app.route('/canceling', methods=['POST'])
+def cancel_flight():
+    try:
+        # Obtener el JSON de la solicitud
+        data = request.get_json()
+        to_cancel_ids = data.get("toCancel", [])
+        to_cancel_ids = [ObjectId(id) for id in to_cancel_ids]
+
+        if not to_cancel_ids:
+            return jsonify({"message": "No se proporcionaron IDs para cancelar."}), 400
+
+        # Obtener el token de la cabecera de la solicitud
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({"message": "Token de autenticación no proporcionado."}), 401
+
+        # Solicitar el ID del usuario al API Gateway
+        user_id = get_user_id_from_api_gateway(token)
+        if not user_id:
+            return jsonify({"message": "No se pudo obtener el ID del usuario."}), 401
+       
+        # Actualizar los documentos en la colección Flights donde el user_id coincide
+        result = db.Flights.update_many(
+            {
+                "_id": {"$in": to_cancel_ids},  # Coincidir con los IDs proporcionados
+                "user": ObjectId(user_id)      # Asegurarse de que el user_id coincide
+            },
+            {"$set": {"user": None}}           # Asignar null (None en Python) al campo "user"
+        )
+
+        return jsonify({
+            "message": "Vuelos cancelados.",
+            "user_id": str(user_id),
+            "matched_count": result.matched_count,  # Número de documentos coincidentes
+            "modified_count": result.modified_count  # Número de documentos modificados
         }), 200
 
     except Exception as e:
