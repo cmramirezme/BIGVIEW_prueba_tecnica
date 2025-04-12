@@ -1,0 +1,147 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "API Gateway",
+      "description": "Gateway para gestionar microservicios: vuelos y gestión de usuarios",
+      "version": "1.0.0"
+    },
+    "host": "localhost:5000",
+    "basePath": "/",
+    "schemes": ["http"],
+    "paths": {
+      "/flights-management/{path}": {
+        "get": {
+          "summary": "Reenviar solicitud al microservicio de gestión de vuelos",
+          "description": "Redirige solicitudes al microservicio de gestión de vuelos. Verifica la autenticación antes de proceder.",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": "Token JWT requerido para autenticación"
+            },
+            {
+              "name": "path",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "description": "Ruta específica dentro del microservicio de vuelos"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Solicitud reenviada exitosamente",
+              "schema": { "type": "object" }
+            },
+            "401": {
+              "description": "Token inválido o no proporcionado"
+            },
+            "500": {
+              "description": "Error al reenviar la solicitud"
+            }
+          }
+        },
+        "post": {
+          "summary": "Reenviar solicitud POST al microservicio de gestión de vuelos",
+          "description": "Redirige solicitudes POST al microservicio de gestión de vuelos. Verifica la autenticación antes de proceder.",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": "Token JWT requerido para autenticación"
+            },
+            {
+              "name": "path",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "description": "Ruta específica dentro del microservicio de vuelos"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": false,
+              "schema": { "type": "object" },
+              "description": "Cuerpo de la solicitud"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Solicitud POST reenviada exitosamente",
+              "schema": { "type": "object" }
+            },
+            "401": {
+              "description": "Token inválido o no proporcionado"
+            },
+            "500": {
+              "description": "Error al reenviar la solicitud"
+            }
+          }
+        }
+      },
+      "/user-management/{path}": {
+        "get": {
+          "summary": "Reenviar solicitud al microservicio de gestión de usuarios",
+          "description": "Redirige solicitudes al microservicio de gestión de usuarios.",
+          "parameters": [
+            {
+              "name": "Authorization",
+              "in": "header",
+              "required": true,
+              "type": "string",
+              "description": "Token JWT requerido para autenticación"
+            },
+            {
+              "name": "path",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "description": "Ruta específica dentro del microservicio de usuarios"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Solicitud reenviada exitosamente",
+              "schema": { "type": "object" }
+            },
+            "500": {
+              "description": "Error al reenviar la solicitud"
+            }
+          }
+        },
+        "post": {
+          "summary": "Reenviar solicitud POST al microservicio de gestión de usuarios",
+          "description": "Redirige solicitudes POST al microservicio de gestión de usuarios.",
+          "parameters": [
+            {
+              "name": "path",
+              "in": "path",
+              "required": true,
+              "type": "string",
+              "description": "Ruta específica dentro del microservicio de usuarios"
+            },
+            {
+              "name": "body",
+              "in": "body",
+              "required": false,
+              "schema": { "type": "object" },
+              "description": "Cuerpo de la solicitud"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Solicitud POST reenviada exitosamente",
+              "schema": { "type": "object" }
+            },
+            "500": {
+              "description": "Error al reenviar la solicitud"
+            }
+          }
+        }
+      }
+    }
+  }
+  
