@@ -33,7 +33,7 @@ services:
     image: mongo:6.0
     container_name: flight-search-db
     environment:
-      MONGO_INITDB_DATABASE: flightsearchdb
+      MONGO_INITDB_DATABASE: FlightDB
     volumes:
       - ./flight-search/data_db:/data/db  # Mapeo a la ubicación en el host
     ports:
@@ -58,7 +58,7 @@ services:
     image: mongo:6.0
     container_name: user-management-db
     environment:
-      MONGO_INITDB_DATABASE: usermanagementdb
+      MONGO_INITDB_DATABASE: UsersDB
     volumes:
       - ./user-management/data_db:/data/db  # Mapeo a la ubicación en el host
     ports:
